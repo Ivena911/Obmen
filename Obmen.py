@@ -11,9 +11,10 @@ def exchange():
             response = requests.get(f'https://open.er-api.com/v6/latest/USD')
             response.raise_for_status()
             data = response.json()
-            if code in data['rates'][code]:
+
+            if code in data['rates']:
                 exchange_rate = data['rates'][code]
-                mb.showinfo("Курс обмена",f"Курс к доллару: {exchange_rate:.1f}{code} за 1 доллар")
+                mb.showinfo("Курс обмена",f"Курс к доллару: {exchange_rate:.2f}{code} за 1 доллар")
             else:
                 mb.showerror("Ошибка", f"Валюта {code} не найдена")
         except Exception as e:
