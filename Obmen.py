@@ -4,10 +4,15 @@ from tkinter import messagebox as mb
 import requests
 import json
 
-def update_currency_label(event):
+def update_base_label(event):
+    code = base_combobox.get()
+    name = currencies[code]
+    base_label.config(text=name)
+
+def update_target_label(event):
     code = target_combobox.get()
     name = currencies[code]
-    currency_label.config(text=name)
+    target_label.config(text=name)
 
 
 def exchange():
@@ -23,7 +28,7 @@ def exchange():
                 exchange_rate = data['rates'][target_code]
                 base_name = currencies[base_code]
                 target_name = currencies[target_code]
-                mb.showinfo("Курс обмена",f"Курс к доллару: {exchange_rate:.2f} {target_name} за 1 "
+                mb.showinfo("Курс обмена",f"Курс обмена: {exchange_rate:.2f} {target_name} за 1 "
                                           f"{base_name}")
             else:
                 mb.showerror("Ошибка", f"Валюта {target_code} не найдена")
@@ -46,25 +51,26 @@ currencies = {"EUR": "Евро",
               "USD": "Американский доллар"}
 
 window = Tk()
-window.title("Курс обмена валюты к доллару")
+window.title("Курс обмена валюты")
 window.geometry("360x300")
 
 Label(text="Базовая валюта: ").pack(padx=10, pady=10)
 
 base_combobox = ttk.Combobox(values=list(currencies.keys()))
 base_combobox.pack(padx=10, pady=10)
-# base_combobox.bind("<<ComboboxSelected>>", update_currency_label)
+base_combobox.bind("<<ComboboxSelected>>", update_base_label)
+
+base_label = ttk.Label()
+base_label.pack(padx=10, pady=10)
 
 Label(text="Целевая валюта: ").pack(padx=10, pady=10)
 
 target_combobox = ttk.Combobox(values=list(currencies.keys()))
 target_combobox.pack(padx=10, pady=10)
-target_combobox.bind("<<ComboboxSelected>>", update_currency_label)
+target_combobox.bind("<<ComboboxSelected>>", update_target_label)
 
-# entry = Entry()
-# entry.pack(padx=10, pady=10)
-currency_label = ttk.Label()
-currency_label.pack(padx=10, pady=10)
+target_label = ttk.Label()
+target_label.pack(padx=10, pady=10)
 
 Button(text="Получить курс обмена", command=exchange).pack(padx=10, pady=10)
 window.mainloop()
