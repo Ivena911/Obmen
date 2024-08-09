@@ -4,6 +4,22 @@ import requests
 import json
 
 
+def exchange():
+    code = entry.get().upper()
+    if code:
+        try:
+            response = requests.get(f'https://open.er-api.com/v6/latest/USD')
+            response.raise_for_status()
+            data = response.json()
+            if code in data['rates'][code]:
+                exchange_rate = data['rates'][code]
+                mb.showinfo("Курс обмена",f"Курс к доллару: {exchange_rate:.1f}{code} за 1 доллар")
+            else:
+                mb.showerror("Ошибка", f"Валюта {code} не найдена")
+        except Exception as e:
+            mb.showerror("Ошибка",f"Произошла ошибка: {e}")
+    else:
+        mb.showwarning("Внимание"," Введите код валюты")
 
 
 window = Tk()
